@@ -24,6 +24,11 @@ cd pymix
 
 ## Usage
 
+> Make sure you are in the `root dir` of your Elixir project & `mix.exs` exists on the same level.
+
+- PyMix needs an Elixir project with `mix.exs` to work.
+- PyMix can be added to the system path for easy access.
+
 ### Fetch Package Info
 Retrieve information about one or more Hex packages:
 ```sh

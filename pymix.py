@@ -40,18 +40,24 @@ def fetch_pkg_info(pkg):
 
         # Extract details
         config = re.search(r"Config: ({.*?})", output)
-        releases = re.search(r"Releases:\s*(.*)", output)
+        releases_match = re.search(r"Releases:\s*(.*)", output)
         licenses = re.search(r"Licenses:\s*(.*)", output)
         github = re.search(r"GitHub:\s*(https://[^\s]+)", output)
 
-        # Parse releases and ignore retired versions
-        valid_versions = [v.strip() for v in releases.group(1).split(",") if "(retired)" not in v] if releases else []
+        # Handle cases where no releases are found
+        all_versions = []
+        valid_versions = []
+        if releases_match:
+            all_versions = [v.strip() for v in releases_match.group(1).split(",")] if releases_match.group(1) else []
+            valid_versions = [v for v in all_versions if "(retired)" not in v]
+
         latest_version = valid_versions[0] if valid_versions else None
 
         return {
             "description": output.split("\n")[0],
             "config": config.group(1) if config else None,
             "latest_version": latest_version,
+            "all_versions": valid_versions,  # Return all versions
             "license": licenses.group(1) if licenses else None,
             "github": github.group(1) if github else None,
         }
@@ -75,6 +81,8 @@ def get_pkg_info(packages):
             print(f"{BOLD}{YELLOW}Config:{RESET} {pkg_info['config']}")
         if pkg_info["latest_version"]:
             print(f"{BOLD}{YELLOW}Latest Release:{RESET} {pkg_info['latest_version']}")
+        if pkg_info["all_versions"]:
+            print(f"{BOLD}{YELLOW}All Releases:{RESET} {', '.join(pkg_info['all_versions']) if pkg_info['all_versions'] else 'None'}")
         if pkg_info["license"]:
             print(f"{BOLD}{YELLOW}License:{RESET} {pkg_info['license']}")
         if pkg_info["github"]:
