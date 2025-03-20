@@ -22,12 +22,16 @@ git clone https://github.com/yourusername/pymix.git
 cd pymix
 ```
 
-## Usage
+## Requirements & Usage
 
 > Make sure you are in the `root dir` of your Elixir project & `mix.exs` exists on the same level.
 
+- PyMix needs an active Elixir environment with the `mix` command available. If you are using Kerl & Kiex for version management, make sure to source the evironment before using PyMix.
 - PyMix needs an Elixir project with `mix.exs` to work.
-- PyMix can be added to the system path for easy access.
+- PyMix can be added as an alias to your RC file for easy access.
+```sh
+alias pymix="py /opt/Scripts/elixir_automation/pymix/pymix.py"
+```
 
 ### Fetch Package Info
 Retrieve information about one or more Hex packages:
